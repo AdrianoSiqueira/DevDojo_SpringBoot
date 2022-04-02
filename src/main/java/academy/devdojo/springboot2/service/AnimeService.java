@@ -8,12 +8,14 @@ import java.util.List;
 @Service
 public class AnimeService {
 
+    private final List<Anime> animes = List.of(
+            new Anime(1L, "DBZ"),
+            new Anime(2L, "Berserk")
+    );
+
     // private final AnimeRepository animeRepository;
 
     public List<Anime> listAll() {
-        return List.of(
-                new Anime(1L, "DBZ"),
-                new Anime(2L, "Berserk")
-        );
+        return animes;
     }
 }
