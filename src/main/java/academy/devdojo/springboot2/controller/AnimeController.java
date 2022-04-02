@@ -19,7 +19,7 @@ public class AnimeController {
 
     private final DateUtil dateUtil;
 
-    @GetMapping(path = "list")
+    @GetMapping
     public List<Anime> list() {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
 
