@@ -19,6 +19,10 @@ public class AnimeService {
 
     // private final AnimeRepository animeRepository;
 
+    public void delete(long id) {
+        animes.remove(findById(id));
+    }
+
     public Anime findById(long id) {
         return animes.stream()
                      .filter(anime -> anime.getId().equals(id))
