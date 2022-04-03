@@ -34,6 +34,11 @@ public class AnimeService {
         return animes;
     }
 
+    public void replace(Anime anime) {
+        delete(anime.getId());
+        animes.add(anime);
+    }
+
     public Anime save(Anime anime) {
         anime.setId(ThreadLocalRandom.current().nextLong(3, 1000));
         animes.add(anime);
