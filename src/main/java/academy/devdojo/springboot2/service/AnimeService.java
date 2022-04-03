@@ -5,15 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AnimeService {
 
-    private final List<Anime> animes = List.of(
+    private static final List<Anime> animes = new ArrayList<>(List.of(
             new Anime(1L, "DBZ"),
             new Anime(2L, "Berserk")
-    );
+    ));
 
     // private final AnimeRepository animeRepository;
 
