@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class AnimeService {
@@ -27,5 +28,12 @@ public class AnimeService {
 
     public List<Anime> listAll() {
         return animes;
+    }
+
+    public Anime save(Anime anime) {
+        anime.setId(ThreadLocalRandom.current().nextLong(3, 1000));
+        animes.add(anime);
+
+        return anime;
     }
 }
