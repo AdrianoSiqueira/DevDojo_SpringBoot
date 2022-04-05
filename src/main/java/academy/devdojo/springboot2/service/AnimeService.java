@@ -18,10 +18,10 @@ public class AnimeService {
     private final AnimeRepository animeRepository;
 
     public void delete(long id) {
-        animeRepository.delete(findById(id));
+        animeRepository.delete(findByIdOrThowBadRequestException(id));
     }
 
-    public Anime findById(long id) {
+    public Anime findByIdOrThowBadRequestException(long id) {
         return animeRepository.findById(id)
                               .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
     }
@@ -31,7 +31,7 @@ public class AnimeService {
     }
 
     public void replace(AnimePutRequestBody requestBody) {
-        Anime savedAnime = findById(requestBody.getId());
+        Anime savedAnime = findByIdOrThowBadRequestException(requestBody.getId());
 
         Anime anime = Anime.builder()
                            .id(savedAnime.getId())
