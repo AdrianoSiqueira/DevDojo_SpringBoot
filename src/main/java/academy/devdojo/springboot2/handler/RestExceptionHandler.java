@@ -2,7 +2,9 @@ package academy.devdojo.springboot2.handler;
 
 import academy.devdojo.springboot2.exception.BadRequestException;
 import academy.devdojo.springboot2.exception.BadRequestExceptionDetails;
+import academy.devdojo.springboot2.exception.ExceptionDetails;
 import academy.devdojo.springboot2.exception.ValidationExceptionDetails;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = BadRequestException.class)
-    public ResponseEntity<BadRequestExceptionDetails> handlerBadRequestException(BadRequestException exception) {
+    public ResponseEntity<BadRequestExceptionDetails> handleBadRequestException(BadRequestException exception) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         BadRequestExceptionDetails details =
@@ -35,10 +37,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(details, status);
     }
 
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationExceptionDetails> handlerMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ExceptionDetails details = ExceptionDetails.builder()
+                                                   .title(exception.getCause().getMessage())
+                                                   .details(exception.getMessage())
+                                                   .developerMessage(exception.getClass().getName())
+                                                   .code(status.value())
+                                                   .timestamp(LocalDateTime.now())
+                                                   .build();
 
+        return new ResponseEntity<>(details, headers, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<FieldError> fieldErrors   = exception.getBindingResult().getFieldErrors();
         String           fields        = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
         String           fieldsMessage = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
