@@ -31,12 +31,10 @@ public class SpringClient {
         Anime[] animesArray = new RestTemplate().getForObject(getAll, Anime[].class);
         log.info(Arrays.toString(animesArray));
 
-        ResponseEntity<List<Anime>> animeListResponse = new RestTemplate().exchange(
-                getAll,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {}
-        );
+        ResponseEntity<List<Anime>> animeListResponse = new RestTemplate().exchange(getAll,
+                                                                                    HttpMethod.GET,
+                                                                                    null,
+                                                                                    new ParameterizedTypeReference<>() {});
         log.info(animeListResponse.getBody());  // getBody retorna a lista
     }
 }
