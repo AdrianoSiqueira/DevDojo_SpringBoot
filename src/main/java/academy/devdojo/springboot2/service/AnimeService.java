@@ -37,6 +37,10 @@ public class AnimeService {
         return animeRepository.findAll(pageable);
     }
 
+    public List<Anime> listAllNonPageable() {
+        return animeRepository.findAll();
+    }
+
     public void replace(AnimePutRequestBody requestBody) {
         Anime savedAnime = findByIdOrThrowBadRequestException(requestBody.getId());
 
