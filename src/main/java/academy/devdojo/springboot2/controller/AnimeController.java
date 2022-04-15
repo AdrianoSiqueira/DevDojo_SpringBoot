@@ -56,6 +56,11 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
 
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<Anime>> list() {
+        return ResponseEntity.ok(animeService.listAllNonPageable());
+    }
+
     @PutMapping
     public ResponseEntity<Void> replace(@RequestBody AnimePutRequestBody requestBody) {
         animeService.replace(requestBody);
