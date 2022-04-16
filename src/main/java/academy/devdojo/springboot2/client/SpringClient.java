@@ -20,7 +20,8 @@ public class SpringClient {
 
     public static void main(String[] args) {
 //        getRequest();
-        postRequest();
+//        postRequest();
+        putRequest();
     }
 
     private static void getRequest() {
@@ -57,5 +58,25 @@ public class SpringClient {
                                                                      new HttpEntity<>(anime),
                                                                      new ParameterizedTypeReference<>() {});
         log.info("Saved anime: {}", response.getBody());
+    }
+
+    private static void putRequest() {
+        String post = "http://localhost:8080/animes";
+        String put  = "http://localhost:8080/animes";
+
+        Anime anime = Anime.builder().name("Pica Pal").build();
+        ResponseEntity<Anime> postResponse = new RestTemplate().exchange(post,
+                                                                         HttpMethod.POST,
+                                                                         new HttpEntity<>(anime),
+                                                                         new ParameterizedTypeReference<>() {});
+        log.info("Saved anime: {}", postResponse.getBody());
+
+        anime = postResponse.getBody();
+        anime.setName("Pica Pau");
+        ResponseEntity<Void> putResponse = new RestTemplate().exchange(put,
+                                                                       HttpMethod.PUT,
+                                                                       new HttpEntity<>(anime),
+                                                                       new ParameterizedTypeReference<>() {});
+        log.info("Updated anime: {}", putResponse);
     }
 }
