@@ -18,6 +18,10 @@ import java.util.List;
 public class SpringClient {
 
     public static void main(String[] args) {
+        getRequest();
+    }
+
+    private static void getRequest() {
         String getById = "http://localhost:8080/animes/2";
         String getAll  = "http://localhost:8080/animes/all";
 
