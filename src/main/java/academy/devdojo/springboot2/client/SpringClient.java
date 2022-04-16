@@ -18,7 +18,8 @@ import java.util.List;
 public class SpringClient {
 
     public static void main(String[] args) {
-        getRequest();
+//        getRequest();
+        postRequest();
     }
 
     private static void getRequest() {
@@ -40,5 +41,13 @@ public class SpringClient {
                                                                                     null,
                                                                                     new ParameterizedTypeReference<>() {});
         log.info(animeListResponse.getBody());  // getBody retorna a lista
+    }
+
+    private static void postRequest() {
+        String post = "http://localhost:8080/animes";
+
+        Anime anime = Anime.builder().name("Kingdom").build();
+        anime = new RestTemplate().postForObject(post, anime, Anime.class);
+        log.info("Saved anime: {}", anime);
     }
 }
