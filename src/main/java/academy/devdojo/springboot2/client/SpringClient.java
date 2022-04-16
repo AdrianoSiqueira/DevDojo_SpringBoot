@@ -3,6 +3,7 @@ package academy.devdojo.springboot2.client;
 import academy.devdojo.springboot2.domain.Anime;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -46,8 +47,15 @@ public class SpringClient {
     private static void postRequest() {
         String post = "http://localhost:8080/animes";
 
-        Anime anime = Anime.builder().name("Kingdom").build();
-        anime = new RestTemplate().postForObject(post, anime, Anime.class);
-        log.info("Saved anime: {}", anime);
+//        Anime anime = Anime.builder().name("Kingdom").build();
+//        anime = new RestTemplate().postForObject(post, anime, Anime.class);
+//        log.info("Saved anime: {}", anime);
+
+        Anime anime = Anime.builder().name("Teen Titans").build();
+        ResponseEntity<Anime> response = new RestTemplate().exchange(post,
+                                                                     HttpMethod.POST,
+                                                                     new HttpEntity<>(anime),
+                                                                     new ParameterizedTypeReference<>() {});
+        log.info("Saved anime: {}", response.getBody());
     }
 }
