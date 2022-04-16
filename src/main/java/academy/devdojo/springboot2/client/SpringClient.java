@@ -21,7 +21,19 @@ public class SpringClient {
     public static void main(String[] args) {
 //        getRequest();
 //        postRequest();
-        putRequest();
+//        putRequest();
+        deleteRequest();
+    }
+
+    private static void deleteRequest() {
+        String delete = "http://localhost:8080/animes/{id}";
+
+        ResponseEntity<Void> response = new RestTemplate().exchange(delete,
+                                                                    HttpMethod.DELETE,
+                                                                    null,
+                                                                    new ParameterizedTypeReference<>() {},
+                                                                    26);
+        log.info("Deleted anime: {}", response);
     }
 
     private static void getRequest() {
