@@ -24,6 +24,19 @@ class AnimeRepositoryTest {
     }
 
     @Test
+    void findByName_ReturnsEmptyList_WhenAnimeIsNotFound() {
+        assertThat(animeRepository.findByName("Not Found")).isEmpty();
+    }
+
+    @Test
+    void findByName_ReturnsListOfAnime_WhenSuccessful() {
+        Anime anime = createAnime();
+        animeRepository.save(anime);
+
+        assertThat(animeRepository.findByName(anime.getName())).isNotEmpty();
+    }
+
+    @Test
     void save_PersistAnime_WhenSuccessful() {
         Anime animeToSave = createAnime();
         Anime savedAnime  = animeRepository.save(animeToSave);
