@@ -14,6 +14,16 @@ class AnimeRepositoryTest {
     private AnimeRepository animeRepository;
 
     @Test
+    void delete_RemovesAnime_WhenSuccessful() {
+        Anime anime = createAnime();
+        anime = animeRepository.save(anime);
+
+        assertThat(animeRepository.findAll()).isNotEmpty();
+        animeRepository.deleteById(anime.getId());
+        assertThat(animeRepository.findAll()).isEmpty();
+    }
+
+    @Test
     void save_PersistAnime_WhenSuccessful() {
         Anime animeToSave = createAnime();
         Anime savedAnime  = animeRepository.save(animeToSave);
