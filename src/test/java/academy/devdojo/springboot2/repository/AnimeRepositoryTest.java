@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.validation.ConstraintViolationException;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class AnimeRepositoryTest {
@@ -44,6 +47,25 @@ class AnimeRepositoryTest {
         assertThat(savedAnime).isNotNull();
         assertThat(savedAnime.getId()).isNotNull();
         assertThat(savedAnime.getName()).isEqualTo(animeToSave.getName());
+    }
+
+    @Test
+    void save_ThrowsConstraintViolationException_WhenNameIsEmpty() {
+        Anime anime = new Anime();
+
+        /*
+         * Pode verificar se o método lança uma exceção, ou pode verificar
+         * se uma exceção é lançada pelo método. Só pode usar uma abordagem,
+         * senão o método de teste falha.
+         */
+
+        // Método lança exceção
+        assertThatThrownBy(() -> animeRepository.save(anime))
+                .isInstanceOf(ConstraintViolationException.class);
+
+        // Exceção é lançada pelo método
+//        assertThatExceptionOfType(ConstraintViolationException.class)
+//                .isThrownBy(() -> animeRepository.save(anime));
     }
 
     @Test
