@@ -1,6 +1,7 @@
 package academy.devdojo.springboot2.repository;
 
 import academy.devdojo.springboot2.domain.Anime;
+import academy.devdojo.springboot2.util.AnimeCreator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +19,7 @@ class AnimeRepositoryTest {
 
     @Test
     void delete_RemovesAnime_WhenSuccessful() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToSave();
         anime = animeRepository.save(anime);
 
         assertThat(animeRepository.findAll()).isNotEmpty();
@@ -33,7 +34,7 @@ class AnimeRepositoryTest {
 
     @Test
     void findByName_ReturnsListOfAnime_WhenSuccessful() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToSave();
         animeRepository.save(anime);
 
         assertThat(animeRepository.findByName(anime.getName())).isNotEmpty();
@@ -41,7 +42,7 @@ class AnimeRepositoryTest {
 
     @Test
     void save_PersistAnime_WhenSuccessful() {
-        Anime animeToSave = createAnime();
+        Anime animeToSave = AnimeCreator.createAnimeToSave();
         Anime savedAnime  = animeRepository.save(animeToSave);
 
         assertThat(savedAnime).isNotNull();
@@ -70,7 +71,7 @@ class AnimeRepositoryTest {
 
     @Test
     void save_UpdateAnime_WhenSuccessful() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToSave();
         anime = animeRepository.save(anime);
 
         anime.setName("Test 2");
@@ -79,11 +80,5 @@ class AnimeRepositoryTest {
         assertThat(updatedAnime).isNotNull();
         assertThat(updatedAnime.getId()).isNotNull();
         assertThat(updatedAnime.getName()).isEqualTo(anime.getName());
-    }
-
-    private Anime createAnime() {
-        return Anime.builder()
-                    .name("Test")
-                    .build();
     }
 }
