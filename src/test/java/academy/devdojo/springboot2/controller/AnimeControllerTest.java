@@ -2,9 +2,11 @@ package academy.devdojo.springboot2.controller;
 
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
+import academy.devdojo.springboot2.requests.AnimePutRequestBody;
 import academy.devdojo.springboot2.service.AnimeService;
 import academy.devdojo.springboot2.util.AnimeCreator;
 import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
+import academy.devdojo.springboot2.util.AnimePutRequestBodyCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +16,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 /*
  * @ExtendWith é usado para não carregar totalmente o spring, isso fará os testes
@@ -105,6 +110,19 @@ class AnimeControllerTest {
     }
 
     @Test
+    void replace_UpdatesAnime_WhenSuccessful() {
+        // Pode ser feito assim
+        assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody()))
+                .doesNotThrowAnyException();
+
+        // Ou assim
+        ResponseEntity<Void> response = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
     void save_ReturnsAnime_WhenSuccessful() {
         Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody())
                                      .getBody();
@@ -112,7 +130,6 @@ class AnimeControllerTest {
         assertThat(anime).isNotNull()
                          .isEqualTo(AnimeCreator.createValidAnime());
     }
-
 
     /*
      * Intercepta as chamadas ao animeServiceMock e modifica o valor de retorno.
@@ -136,5 +153,10 @@ class AnimeControllerTest {
         // Só vai dar um trigger no mockito se o objeto for instância de AnimePostRequestBody
         BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
                   .thenReturn(AnimeCreator.createValidAnime());
+
+        // A sintaxe é diferente quando o método retorna void
+        BDDMockito.doNothing()
+                  .when(animeServiceMock)
+                  .replace(ArgumentMatchers.any(AnimePutRequestBody.class));
     }
 }
