@@ -54,6 +54,17 @@ class AnimeControllerTest {
     private AnimeService animeServiceMock;
 
     @Test
+    void delete_RemovesAnime_WhenSuccessful() {
+        assertThatCode(() -> animeController.delete(0))
+                .doesNotThrowAnyException();
+
+        ResponseEntity<Void> response = animeController.delete(0);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
     void findById_ReturnsAnime_WhenSuccessful() {
         Long  expectedId = AnimeCreator.createValidAnime().getId();
         Anime anime      = animeController.findById(0).getBody();
@@ -158,5 +169,9 @@ class AnimeControllerTest {
         BDDMockito.doNothing()
                   .when(animeServiceMock)
                   .replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+
+        BDDMockito.doNothing()
+                  .when(animeServiceMock)
+                  .delete(ArgumentMatchers.anyLong());
     }
 }
