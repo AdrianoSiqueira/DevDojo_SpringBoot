@@ -1,8 +1,10 @@
 package academy.devdojo.springboot2.controller;
 
 import academy.devdojo.springboot2.domain.Anime;
+import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.service.AnimeService;
 import academy.devdojo.springboot2.util.AnimeCreator;
+import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -102,6 +104,16 @@ class AnimeControllerTest {
                 .isEqualTo(expectedName);
     }
 
+    @Test
+    void save_ReturnsAnime_WhenSuccessful() {
+        Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody())
+                                     .getBody();
+
+        assertThat(anime).isNotNull()
+                         .isEqualTo(AnimeCreator.createValidAnime());
+    }
+
+
     /*
      * Intercepta as chamadas ao animeServiceMock e modifica o valor de retorno.
      */
@@ -120,5 +132,9 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
                   .thenReturn(List.of(AnimeCreator.createValidAnime()));
+
+        // Só vai dar um trigger no mockito se o objeto for instância de AnimePostRequestBody
+        BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
+                  .thenReturn(AnimeCreator.createValidAnime());
     }
 }
