@@ -46,6 +46,17 @@ class AnimeControllerTest {
     private AnimeService animeServiceMock;
 
     @Test
+    void findById_ReturnsAnime_WhenSuccessful() {
+        Long  expectedId = AnimeCreator.createValidAnime().getId();
+        Anime anime      = animeController.findById(0).getBody();
+
+        assertThat(anime).isNotNull();
+
+        assertThat(anime.getId()).isNotNull()
+                                 .isEqualTo(expectedId);
+    }
+
+    @Test
     void listAll_ReturnsListOfAnimes_WhenSuccessful() {
         List<Anime> page = animeController.list().getBody();
 
@@ -81,5 +92,8 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.listAllNonPageable())
                   .thenReturn(List.of(AnimeCreator.createValidAnime()));
+
+        BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
+                  .thenReturn(AnimeCreator.createValidAnime());
     }
 }
