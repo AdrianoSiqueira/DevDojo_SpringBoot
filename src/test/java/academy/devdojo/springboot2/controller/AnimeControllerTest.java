@@ -46,6 +46,15 @@ class AnimeControllerTest {
     private AnimeService animeServiceMock;
 
     @Test
+    void listAll_ReturnsListOfAnimes_WhenSuccessful() {
+        List<Anime> page = animeController.list().getBody();
+
+        assertThat(page).isNotNull()
+                        .isNotEmpty()
+                        .hasSize(1);
+    }
+
+    @Test
     void list_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
         String      expectedName = AnimeCreator.createValidAnime().getName();
         Page<Anime> page         = animeController.list(null).getBody();
@@ -69,5 +78,8 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.listAll(ArgumentMatchers.any()))
                   .thenReturn(animePage);
+
+        BDDMockito.when(animeServiceMock.listAllNonPageable())
+                  .thenReturn(List.of(AnimeCreator.createValidAnime()));
     }
 }
