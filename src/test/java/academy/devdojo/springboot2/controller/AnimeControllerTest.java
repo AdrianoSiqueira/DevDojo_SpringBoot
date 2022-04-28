@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,6 +58,27 @@ class AnimeControllerTest {
     }
 
     @Test
+    void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound() {
+        // Sobrescreve o comportamento do mockito apenas para esse método
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
+                  .thenReturn(Collections.emptyList());
+
+        List<Anime> animes = animeController.findByName("").getBody();
+
+        assertThat(animes).isNotNull()
+                          .isEmpty();
+    }
+
+    @Test
+    void findByName_ReturnsListOfAnimes_WhenSuccessful() {
+        List<Anime> animes = animeController.findByName("").getBody();
+
+        assertThat(animes).isNotNull()
+                          .isNotEmpty()
+                          .hasSize(1);
+    }
+
+    @Test
     void listAll_ReturnsListOfAnimes_WhenSuccessful() {
         List<Anime> page = animeController.list().getBody();
 
@@ -95,5 +117,8 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
                   .thenReturn(AnimeCreator.createValidAnime());
+
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
+                  .thenReturn(List.of(AnimeCreator.createValidAnime()));
     }
 }
