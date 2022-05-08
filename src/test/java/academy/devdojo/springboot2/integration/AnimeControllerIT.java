@@ -2,7 +2,9 @@ package academy.devdojo.springboot2.integration;
 
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.repository.AnimeRepository;
+import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.util.AnimeCreator;
+import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
 import academy.devdojo.springboot2.wrapper.PageableResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -115,5 +119,26 @@ class AnimeControllerIT {
 
         assertThat(page.toList().get(0).getName())
                 .isEqualTo(expectedName);
+    }
+
+    @Test
+    void save_ReturnsAnime_WhenSuccessful() {
+        AnimePostRequestBody requestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
+
+        ResponseEntity<Anime> response = restTemplate.postForEntity("/animes",
+                                                                    requestBody,
+                                                                    Anime.class);
+
+        assertThat(response)
+                .isNotNull();
+
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.CREATED);
+
+        assertThat(response.getBody())
+                .isNotNull();
+
+        assertThat(response.getBody().getId())
+                .isNotNull();
     }
 }
