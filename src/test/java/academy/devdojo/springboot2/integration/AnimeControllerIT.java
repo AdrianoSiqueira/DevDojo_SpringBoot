@@ -13,6 +13,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -24,6 +26,26 @@ class AnimeControllerIT {
 
     @Autowired
     private AnimeRepository animeRepository;
+
+    @Test
+    void listAll_ReturnsListOfAnimes_WhenSuccessful() {
+        Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
+        String expectedName = savedAnime.getName();
+
+        List<Anime> animes = restTemplate.exchange("/animes/all",
+                                                   HttpMethod.GET,
+                                                   null,
+                                                   new ParameterizedTypeReference<List<Anime>>() {})
+                                         .getBody();
+
+        assertThat(animes)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(1);
+
+        assertThat(animes.get(0).getName())
+                .isEqualTo(expectedName);
+    }
 
     @Test
     void list_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
