@@ -33,6 +33,23 @@ class AnimeControllerIT {
     private AnimeRepository animeRepository;
 
     @Test
+    void delete_RemovesAnime_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
+
+        ResponseEntity<Void> response = restTemplate.exchange("/animes/{id}",
+                                                              HttpMethod.DELETE,
+                                                              null,
+                                                              Void.class,
+                                                              savedAnime.getId());
+
+        assertThat(response)
+                .isNotNull();
+
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
     void findById_ReturnsAnime_WhenSuccessful() {
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
         Long  expectedId = savedAnime.getId();
