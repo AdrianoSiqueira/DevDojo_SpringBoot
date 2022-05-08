@@ -28,6 +28,23 @@ class AnimeControllerIT {
     private AnimeRepository animeRepository;
 
     @Test
+    void findById_ReturnsAnime_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
+        Long  expectedId = savedAnime.getId();
+
+        Anime anime = restTemplate.getForObject("/animes/{id}",
+                                                Anime.class,
+                                                expectedId);
+
+        assertThat(anime)
+                .isNotNull();
+
+        assertThat(anime.getId())
+                .isNotNull()
+                .isEqualTo(expectedId);
+    }
+
+    @Test
     void listAll_ReturnsListOfAnimes_WhenSuccessful() {
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
