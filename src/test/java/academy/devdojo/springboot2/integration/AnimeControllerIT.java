@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -119,6 +120,23 @@ class AnimeControllerIT {
 
         assertThat(page.toList().get(0).getName())
                 .isEqualTo(expectedName);
+    }
+
+    @Test
+    void replace_UpdatesAnime_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
+        savedAnime.setName("New Name");
+
+        ResponseEntity<Void> response = restTemplate.exchange("/animes",
+                                                              HttpMethod.PUT,
+                                                              new HttpEntity<>(savedAnime),
+                                                              Void.class);
+
+        assertThat(response)
+                .isNotNull();
+
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.NO_CONTENT);
     }
 
     @Test
