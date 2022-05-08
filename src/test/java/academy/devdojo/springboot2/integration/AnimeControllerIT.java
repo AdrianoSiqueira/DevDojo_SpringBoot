@@ -45,6 +45,19 @@ class AnimeControllerIT {
     }
 
     @Test
+    void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound() {
+        List<Anime> animes = restTemplate.exchange("/animes/find?name=notFound",
+                                                   HttpMethod.GET,
+                                                   null,
+                                                   new ParameterizedTypeReference<List<Anime>>() {})
+                                         .getBody();
+
+        assertThat(animes)
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
     void findByName_ReturnsListOfAnimes_WhenSuccessful() {
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
