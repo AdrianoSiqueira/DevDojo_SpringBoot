@@ -37,7 +37,7 @@ public class DevDojoUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.of(authorities.split(" "))
+        return Stream.of(authorities.split(","))
                      .map(SimpleGrantedAuthority::new)
                      .collect(Collectors.toList());
     }
