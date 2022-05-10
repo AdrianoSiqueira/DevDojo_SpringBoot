@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .roles("USER")
             .and()
             .withUser("Devdojo")
-            .password(encoder.encode("academy"))
+            .password(encoder.encode("123"))
             .roles("USER", "ADMIN");
     }
 
