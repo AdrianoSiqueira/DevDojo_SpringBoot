@@ -46,6 +46,7 @@ public class AnimeController {
     }
 
     @GetMapping(path = "/by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> findById(@PathVariable long id, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
     }
