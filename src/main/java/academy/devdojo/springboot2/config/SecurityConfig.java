@@ -1,5 +1,7 @@
 package academy.devdojo.springboot2.config;
 
+import academy.devdojo.springboot2.service.DevDojoUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final DevDojoUserDetailsService userDetailsService;
 
     /**
      * Esse método irá criar um usuário em memória com a senha criptografada.
@@ -19,14 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-        auth.inMemoryAuthentication()
-            .withUser("Adriano")
-            .password(encoder.encode("123"))
-            .roles("USER")
-            .and()
-            .withUser("Devdojo")
-            .password(encoder.encode("123"))
-            .roles("USER", "ADMIN");
+        auth.userDetailsService(userDetailsService)
+            .passwordEncoder(encoder);
     }
 
     /**
