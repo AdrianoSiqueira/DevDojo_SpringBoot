@@ -48,6 +48,9 @@ class AnimeControllerIT {
     @Autowired
     private AnimeRepository animeRepository;
 
+    @Autowired
+    private DevDojoUserRepository userRepository;
+
     @Test
     void delete_RemovesAnime_WhenSuccessful() {
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
