@@ -28,6 +28,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class AnimeControllerIT {
 
+    private static final DevDojoUser USER = DevDojoUser.builder()
+                                                       .name("Adriano")
+                                                       .username("adriano")
+                                                       .password("{bcrypt}$2a$10$4HHHjOKXmcF/6caRCSw4NOJxsGin3xVQu1rLiJKz1.5m9HfgzwEiS")
+                                                       .authorities("ROLE_USER")
+                                                       .build();
+
+    private static final DevDojoUser ADMIN = DevDojoUser.builder()
+                                                        .name("DevDojo Academy")
+                                                        .username("devdojo")
+                                                        .password("{bcrypt}$2a$10$4HHHjOKXmcF/6caRCSw4NOJxsGin3xVQu1rLiJKz1.5m9HfgzwEiS")
+                                                        .authorities("ROLE_USER,ROLE_ADMIN")
+                                                        .build();
+
     @Autowired
     private TestRestTemplate restTemplate;
 
