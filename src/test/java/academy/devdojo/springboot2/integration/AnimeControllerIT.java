@@ -70,7 +70,7 @@ class AnimeControllerIT {
 
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
 
-        ResponseEntity<Void> response = restTemplateRoleAdmin.exchange("/animes/{id}",
+        ResponseEntity<Void> response = restTemplateRoleAdmin.exchange("/animes/admin/{id}",
                                                                        HttpMethod.DELETE,
                                                                        null,
                                                                        Void.class,
@@ -89,7 +89,7 @@ class AnimeControllerIT {
 
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
 
-        ResponseEntity<Void> response = restTemplateRoleUser.exchange("/animes/{id}",
+        ResponseEntity<Void> response = restTemplateRoleUser.exchange("/animes/admin/{id}",
                                                                       HttpMethod.DELETE,
                                                                       null,
                                                                       Void.class,
