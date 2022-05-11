@@ -178,4 +178,27 @@ class AnimeControllerIT {
         assertThat(response.getBody().getId())
                 .isNotNull();
     }
+
+    @TestConfiguration
+    @Lazy
+    static class Config {
+
+        @Bean(name = "testRestTemplateRoleAdmin")
+        public TestRestTemplate testRestTemplateRoleAdminCreator(@Value("${local.server.port}") int port) {
+            RestTemplateBuilder builder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("devdojo", "123");
+
+            return new TestRestTemplate(builder);
+        }
+
+        @Bean(name = "testRestTemplateRoleUser")
+        public TestRestTemplate testRestTemplateRoleUserCreator(@Value("${local.server.port}") int port) {
+            RestTemplateBuilder builder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("adriano", "123");
+
+            return new TestRestTemplate(builder);
+        }
+    }
 }
