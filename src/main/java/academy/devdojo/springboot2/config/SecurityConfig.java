@@ -35,6 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * CSRF protege contra ações usando credenciais de outro usuário. Setando o
      * token para HttpOnlyFalse impedimos que alguém use cookies de forma
      * indevida.
+     *
+     * A ordem do antMatchers importa, os mais restritivos devem aparecer
+     * primeiro.
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,6 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //            .and()
             .disable()
             .authorizeRequests()
+            .antMatchers("/animes/admin/**")
+            .hasRole("ADMIN")
+            .antMatchers("/animes/**")
+            .hasRole("USER")
             .anyRequest()
             .authenticated()
             .and()
