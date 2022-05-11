@@ -1,16 +1,24 @@
 package academy.devdojo.springboot2.integration;
 
 import academy.devdojo.springboot2.domain.Anime;
+import academy.devdojo.springboot2.domain.DevDojoUser;
 import academy.devdojo.springboot2.repository.AnimeRepository;
+import academy.devdojo.springboot2.repository.DevDojoUserRepository;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.util.AnimeCreator;
 import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
 import academy.devdojo.springboot2.wrapper.PageableResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
@@ -58,15 +66,15 @@ class AnimeControllerIT {
 
     @Test
     void delete_RemovesAnime_WhenSuccessful() {
-        userRepository.save(USER);
+        userRepository.save(ADMIN);
 
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
 
-        ResponseEntity<Void> response = restTemplateRoleUser.exchange("/animes/{id}",
-                                                                      HttpMethod.DELETE,
-                                                                      null,
-                                                                      Void.class,
-                                                                      savedAnime.getId());
+        ResponseEntity<Void> response = restTemplateRoleAdmin.exchange("/animes/{id}",
+                                                                       HttpMethod.DELETE,
+                                                                       null,
+                                                                       Void.class,
+                                                                       savedAnime.getId());
 
         assertThat(response)
                 .isNotNull();
