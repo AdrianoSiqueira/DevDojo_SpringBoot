@@ -53,6 +53,8 @@ class AnimeControllerIT {
 
     @Test
     void delete_RemovesAnime_WhenSuccessful() {
+        userRepository.save(USER);
+
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
 
         ResponseEntity<Void> response = restTemplate.exchange("/animes/{id}",
@@ -70,6 +72,8 @@ class AnimeControllerIT {
 
     @Test
     void findById_ReturnsAnime_WhenSuccessful() {
+        userRepository.save(USER);
+
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
         Long  expectedId = savedAnime.getId();
 
@@ -87,11 +91,13 @@ class AnimeControllerIT {
 
     @Test
     void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound() {
-        List<Anime> animes = restTemplate.exchange("/animes/find?name=notFound",
-                                                   HttpMethod.GET,
-                                                   null,
-                                                   new ParameterizedTypeReference<List<Anime>>() {})
-                                         .getBody();
+        userRepository.save(USER);
+
+        List<Anime> animes = restTemplateRoleUser.exchange("/animes/find?name=notFound",
+                                                           HttpMethod.GET,
+                                                           null,
+                                                           new ParameterizedTypeReference<List<Anime>>() {})
+                                                 .getBody();
 
         assertThat(animes)
                 .isNotNull()
@@ -100,6 +106,8 @@ class AnimeControllerIT {
 
     @Test
     void findByName_ReturnsListOfAnimes_WhenSuccessful() {
+        userRepository.save(USER);
+
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
         String url          = String.format("/animes/find?name=%s", expectedName);
@@ -119,6 +127,8 @@ class AnimeControllerIT {
 
     @Test
     void listAll_ReturnsListOfAnimes_WhenSuccessful() {
+        userRepository.save(USER);
+
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
 
@@ -139,6 +149,8 @@ class AnimeControllerIT {
 
     @Test
     void list_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
+        userRepository.save(USER);
+
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
 
@@ -160,6 +172,8 @@ class AnimeControllerIT {
 
     @Test
     void replace_UpdatesAnime_WhenSuccessful() {
+        userRepository.save(USER);
+
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
         savedAnime.setName("New Name");
 
@@ -177,6 +191,8 @@ class AnimeControllerIT {
 
     @Test
     void save_ReturnsAnime_WhenSuccessful() {
+        userRepository.save(USER);
+
         AnimePostRequestBody requestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
 
         ResponseEntity<Anime> response = restTemplate.postForEntity("/animes",
