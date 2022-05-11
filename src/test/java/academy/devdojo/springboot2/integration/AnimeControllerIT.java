@@ -43,7 +43,12 @@ class AnimeControllerIT {
                                                         .build();
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    @Qualifier(value = "testRestTemplateRoleUser")
+    private TestRestTemplate restTemplateRoleUser;
+
+    @Autowired
+    @Qualifier(value = "testRestTemplateRoleAdmin")
+    private TestRestTemplate restTemplateRoleAdmin;
 
     @Autowired
     private AnimeRepository animeRepository;
@@ -57,11 +62,11 @@ class AnimeControllerIT {
 
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
 
-        ResponseEntity<Void> response = restTemplate.exchange("/animes/{id}",
-                                                              HttpMethod.DELETE,
-                                                              null,
-                                                              Void.class,
-                                                              savedAnime.getId());
+        ResponseEntity<Void> response = restTemplateRoleUser.exchange("/animes/{id}",
+                                                                      HttpMethod.DELETE,
+                                                                      null,
+                                                                      Void.class,
+                                                                      savedAnime.getId());
 
         assertThat(response)
                 .isNotNull();
@@ -77,9 +82,9 @@ class AnimeControllerIT {
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
         Long  expectedId = savedAnime.getId();
 
-        Anime anime = restTemplate.getForObject("/animes/{id}",
-                                                Anime.class,
-                                                expectedId);
+        Anime anime = restTemplateRoleUser.getForObject("/animes/{id}",
+                                                        Anime.class,
+                                                        expectedId);
 
         assertThat(anime)
                 .isNotNull();
@@ -113,11 +118,11 @@ class AnimeControllerIT {
         String url          = String.format("/animes/find?name=%s", expectedName);
 
 
-        List<Anime> animes = restTemplate.exchange(url,
-                                                   HttpMethod.GET,
-                                                   null,
-                                                   new ParameterizedTypeReference<List<Anime>>() {})
-                                         .getBody();
+        List<Anime> animes = restTemplateRoleUser.exchange(url,
+                                                           HttpMethod.GET,
+                                                           null,
+                                                           new ParameterizedTypeReference<List<Anime>>() {})
+                                                 .getBody();
 
         assertThat(animes)
                 .isNotNull()
@@ -132,11 +137,11 @@ class AnimeControllerIT {
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
 
-        List<Anime> animes = restTemplate.exchange("/animes/all",
-                                                   HttpMethod.GET,
-                                                   null,
-                                                   new ParameterizedTypeReference<List<Anime>>() {})
-                                         .getBody();
+        List<Anime> animes = restTemplateRoleUser.exchange("/animes/all",
+                                                           HttpMethod.GET,
+                                                           null,
+                                                           new ParameterizedTypeReference<List<Anime>>() {})
+                                                 .getBody();
 
         assertThat(animes)
                 .isNotNull()
@@ -154,11 +159,11 @@ class AnimeControllerIT {
         Anime  savedAnime   = animeRepository.save(AnimeCreator.createAnimeToSave());
         String expectedName = savedAnime.getName();
 
-        Page<Anime> page = restTemplate.exchange("/animes",
-                                                 HttpMethod.GET,
-                                                 null,
-                                                 new ParameterizedTypeReference<PageableResponse<Anime>>() {})
-                                       .getBody();
+        Page<Anime> page = restTemplateRoleUser.exchange("/animes",
+                                                         HttpMethod.GET,
+                                                         null,
+                                                         new ParameterizedTypeReference<PageableResponse<Anime>>() {})
+                                               .getBody();
 
         assertThat(page).isNotNull();
 
@@ -177,10 +182,10 @@ class AnimeControllerIT {
         Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
         savedAnime.setName("New Name");
 
-        ResponseEntity<Void> response = restTemplate.exchange("/animes",
-                                                              HttpMethod.PUT,
-                                                              new HttpEntity<>(savedAnime),
-                                                              Void.class);
+        ResponseEntity<Void> response = restTemplateRoleUser.exchange("/animes",
+                                                                      HttpMethod.PUT,
+                                                                      new HttpEntity<>(savedAnime),
+                                                                      Void.class);
 
         assertThat(response)
                 .isNotNull();
@@ -195,9 +200,9 @@ class AnimeControllerIT {
 
         AnimePostRequestBody requestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
 
-        ResponseEntity<Anime> response = restTemplate.postForEntity("/animes",
-                                                                    requestBody,
-                                                                    Anime.class);
+        ResponseEntity<Anime> response = restTemplateRoleUser.postForEntity("/animes",
+                                                                            requestBody,
+                                                                            Anime.class);
 
         assertThat(response)
                 .isNotNull();
