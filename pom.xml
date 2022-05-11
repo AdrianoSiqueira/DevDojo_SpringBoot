@@ -12,6 +12,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+        <springdoc-openapi.version>1.4.8</springdoc-openapi.version>
     </properties>
 
     <parent>
@@ -55,17 +56,17 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.4.8</version>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-data-rest</artifactId>
-            <version>1.4.8</version>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.4.8</version>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
