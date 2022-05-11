@@ -84,6 +84,25 @@ class AnimeControllerIT {
     }
 
     @Test
+    void delete_Returns403_WhenUserIsNotAdmin() {
+        userRepository.save(USER);
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToSave());
+
+        ResponseEntity<Void> response = restTemplateRoleUser.exchange("/animes/{id}",
+                                                                      HttpMethod.DELETE,
+                                                                      null,
+                                                                      Void.class,
+                                                                      savedAnime.getId());
+
+        assertThat(response)
+                .isNotNull();
+
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
     void findById_ReturnsAnime_WhenSuccessful() {
         userRepository.save(USER);
 
